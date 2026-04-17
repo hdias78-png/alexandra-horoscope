@@ -460,14 +460,47 @@ function selectService(btn,amount,name){
 }
 
 // CONTACT FORM
-document.getElementById('contact-form').addEventListener('submit',function(e){
-  e.preventDefault();
-  const req=this.querySelectorAll('[required]');let ok=true;
-  req.forEach(f=>{if(!f.value.trim()){ok=false;f.style.borderColor='rgba(200,60,60,.8)'}else{f.style.borderColor=''}});
-  if(!ok)return;
-  this.style.display='none';
-  document.getElementById('form-success').classList.add('show');
-});
+document.getElementById('contact-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const req = this.querySelectorAll('[required]');
+      let ok = true;
+      req.forEach(f => { if (!f.value.trim()) { ok = false; f.style.borderColor = 'rgba(200,60,60,.8)'; } else { f.style.borderColor = ''; } });
+      if (!ok) return;
+
+      const btn = this.querySelector('.btn-submit');
+      btn.textContent = 'Envoi en cours...';
+      btn.disabled = true;
+
+      const formData = new FormData();
+      formData.append('access_key', 'd9b5820c-0f32-489d-947e-f7c07a2dbd0e');
+      formData.append('subject', 'Nouveau message - Alexandra V Horoscope');
+      formData.append('from_name', this.querySelector('[name="prenom"]').value + ' ' + this.querySelector('[name="nom"]').value);
+      formData.append('email', this.querySelector('[name="email"]').value);
+      formData.append('sujet', this.querySelector('[name="sujet"]').value);
+      formData.append('naissance', this.querySelector('[name="naissance"]').value);
+      formData.append('message', this.querySelector('[name="message"]').value);
+
+      fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          this.style.display = 'none';
+          document.getElementById('form-success').classList.add('show');
+        } else {
+          alert("Erreur d'envoi. Veuillez réessayer ou écrire directement à alex.taroscope@outlook.com");
+          btn.textContent = 'Envoyer mon message';
+          btn.disabled = false;
+        }
+      })
+      .catch(() => {
+        alert("Erreur réseau. Veuillez réessayer ou écrire directement à alex.taroscope@outlook.com");
+        btn.textContent = 'Envoyer mon message';
+        btn.disabled = false;
+      });
+    });;
 
 // REVEAL
 const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}}),{threshold:.12});
