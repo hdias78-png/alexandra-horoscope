@@ -369,7 +369,14 @@ footer{background:var(--surface);border-top:1px solid var(--div);padding:var(--s
       </div>
     </div>
     <div class="reveal">
-      <form id="contact-form" novalidate>
+      <div style="background:rgba(201,168,76,.12);border:1.5px solid rgba(201,168,76,.5);border-radius:var(--r-lg);padding:var(--sp4) var(--sp5);margin-bottom:var(--sp5);display:flex;gap:var(--sp3);align-items:flex-start;">
+              <span style="font-size:1.4rem;line-height:1;">⚠️</span>
+              <div>
+                <strong style="color:var(--gold);font-size:var(--text-sm);display:block;margin-bottom:4px;">Ce formulaire est réservé aux clients ayant déjà payé</strong>
+                <span style="color:var(--muted);font-size:var(--text-xs);line-height:1.6;">Pour recevoir votre consultation, merci de <a href="#consultation" style="color:var(--gold);text-decoration:underline;">commander et payer d'abord via PayPal</a> ci-dessus. Indiquez ensuite votre numéro de transaction ci-dessous.</span>
+              </div>
+            </div>
+            <form id="contact-form" novalidate>
         <div class="form-row">
           <div class="form-group"><label for="prenom">Prénom <span class="req">*</span></label><input type="text" id="prenom" name="prenom" placeholder="Votre prénom" required autocomplete="given-name"></div>
           <div class="form-group"><label for="nom">Nom <span class="req">*</span></label><input type="text" id="nom" name="nom" placeholder="Votre nom" required autocomplete="family-name"></div>
@@ -389,6 +396,11 @@ footer{background:var(--surface);border-top:1px solid var(--div);padding:var(--s
           <label for="naissance">Date, heure et lieu de naissance <span class="req">*</span></label>
           <input type="text" id="naissance" name="naissance" placeholder="Ex : 15/03/1985, 14h30, Paris" required>
           <span style="font-size:var(--text-xs);color:var(--faint)">Indispensable pour établir votre thème astral</span>
+        </div>
+        <div class="form-group">
+          <label for="transaction">Numéro de transaction PayPal <span class="req">*</span></label>
+          <input type="text" id="transaction" name="transaction" placeholder="Ex: 8AB12345CD678901E" required>
+          <span style="font-size:var(--text-xs);color:var(--faint)">Retrouvez ce numéro dans votre e-mail de confirmation PayPal</span>
         </div>
         <div class="form-group">
           <label for="message">Votre ou vos questions <span class="req">*</span></label>
@@ -478,6 +490,8 @@ document.getElementById('contact-form').addEventListener('submit', function(e) {
       formData.append('email', this.querySelector('[name="email"]').value);
       formData.append('sujet', this.querySelector('[name="sujet"]').value);
       formData.append('naissance', this.querySelector('[name="naissance"]').value);
+      formData.append('transaction', this.querySelector('[name="transaction"]').value);
+      formData.append('transaction', this.querySelector('[name="transaction"]') ? this.querySelector('[name="transaction"]').value : 'N/A');
       formData.append('message', this.querySelector('[name="message"]').value);
 
       fetch('https://api.web3forms.com/submit', {
